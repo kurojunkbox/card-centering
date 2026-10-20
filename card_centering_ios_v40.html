@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0b1220"><title>Card Centering Lab v4.0</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1220;--panel:#172235;--line:#31435a;--muted:#9db0c6;--accent:#5eead4;--gold:#fbbf24}*{box-sizing:border-box}body{margin:0;overflow-x:hidden;background:var(--bg);color:#eaf3ff;font:15px -apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif}header{padding:19px 16px 13px;background:#111b2d;border-bottom:1px solid var(--line)}h1{font-size:20px;margin:0 0 4px;letter-spacing:.2px}.sub{font-size:12px;color:var(--muted)}main{width:100%;max-width:780px;margin:0 auto;padding:14px 12px 55px;min-width:0;overflow-x:clip}.card{min-width:0;overflow:hidden;overflow-wrap:anywhere;background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:14px;margin:0 0 13px}h2{font-size:15px;margin:0 0 12px}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}button,.upload{border:1px solid #476078;background:#243751;color:#fff;border-radius:10px;padding:11px 13px;font:600 14px -apple-system,BlinkMacSystemFont,sans-serif;cursor:pointer}button.primary,.upload.primary{background:#0d766d;border-color:#2bd6be}button:disabled{opacity:.45}.upload input{display:none}.seg{display:flex;gap:6px}.seg button{flex:1}.seg .active{background:#126d70;border-color:#5eead4}.hint{font-size:12px;line-height:1.65;color:var(--muted);margin:9px 0 0}.canvaswrap{width:100%;max-width:100%;position:relative;background:#090f19;border:1px solid #31435a;border-radius:10px;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}canvas{display:block;width:95%;max-width:95%;height:auto;margin:0 auto;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}.badge{font-size:12px;padding:5px 9px;background:#2b4057;border-radius:20px;color:#d2e3f6}.results{display:grid;grid-template-columns:1fr 1fr;gap:9px}.metric{background:#0c1829;border-radius:11px;padding:12px}.metric strong{display:block;font-size:25px;color:var(--accent);margin-top:5px;font-variant-numeric:tabular-nums}.metric small{color:var(--muted)}.status{padding:10px 12px;border-radius:10px;background:#263950;color:#e2f2ff;font-size:13px;line-height:1.6}.warning{color:#fcd48b}.hidden{display:none!important}.num{font-variant-numeric:tabular-nums}.guide{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.guide label{font-size:12px;color:var(--muted)}.finebar{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:10px}.finebar button{padding:9px 12px;touch-action:manipulation;-webkit-tap-highlight-color:transparent}.finebar button.selected{background:#126d70;border-color:#5eead4}.magnifier{position:absolute;z-index:5;right:9px;top:9px;width:min(200px,66%);height:auto;aspect-ratio:1;border:2px solid #fff;border-radius:12px;box-shadow:0 4px 18px #000b;background:#172235;pointer-events:none;display:none}.magnifier.visible{display:block}.magnifier.curve-horizontal{width:95%;height:166px;aspect-ratio:auto}.magnifier.curve-vertical{width:min(190px,56%);aspect-ratio:4/7}.finehelp{color:#fbbf24;font-size:12px;margin-top:7px}.guide input{width:72px;padding:8px;border-radius:8px;border:1px solid var(--line);background:#0b1220;color:#fff;font-size:14px}footer{color:#8da1b7;font-size:12px;line-height:1.7;margin-top:18px}.corner-controls{display:flex;gap:7px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:10px}.corner-controls .selected{background:#8a5b05;border-color:#fbbf24;color:#fff}.corner-controls button{min-width:42px;touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}.corner-arrows{display:grid;grid-template-columns:repeat(3,44px);grid-template-rows:repeat(3,44px);justify-content:center;gap:3px;padding:6px;margin:0;flex:0 0 auto;border:1px solid #526980;border-radius:18px;background:linear-gradient(155deg,#1c2c40,#101a29);box-shadow:inset 0 1px 2px #ffffff18,0 5px 12px #0008;touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}.corner-arrows button{width:44px;height:44px;min-width:44px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:13px;border:1px solid #5a7188;background:linear-gradient(145deg,#344b63,#1a2a3d);box-shadow:inset 0 1px 1px #ffffff2b,0 2px 4px #0009;color:#e5f2ff;font-size:20px;font-weight:700;line-height:1;touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}.corner-arrows button:active{transform:translateY(1px);background:linear-gradient(145deg,#263a51,#142237);box-shadow:inset 0 2px 5px #0009}.corner-arrows button:focus-visible{outline:2px solid #5eead4;outline-offset:1px}.corner-arrows .up{grid-column:2;grid-row:1}.corner-arrows .left{grid-column:1;grid-row:2}.corner-arrows .pad-center{grid-column:2;grid-row:2;align-self:center;justify-self:center;width:8px;height:8px;border-radius:50%;background:#6d8296;box-shadow:inset 0 1px 2px #0009}.corner-arrows .right{grid-column:3;grid-row:2}.corner-arrows .down{grid-column:2;grid-row:3}.corner-current{font-size:12px;color:var(--muted)}#printNudgeTools{justify-content:center}.arrow-row{flex:1 0 100%;display:flex;justify-content:center;margin-top:8px}#printNudgeTools .arrow-row{margin-top:0}#curveNudgeTools{margin-top:10px}#curveNudgeTools [data-curve-side]{min-width:42px}@media(max-width:420px){.corner-controls{gap:5px}.corner-controls button{min-width:38px;padding:9px 10px}.corner-arrows{grid-template-columns:repeat(3,40px);grid-template-rows:repeat(3,40px);gap:2px;padding:5px;margin-left:0}.corner-arrows button{width:40px;height:40px;min-width:40px}}</style></head>
+<body><header><h1>Card Centering Lab <span style="font-size:12px;color:#5eead4">iOS検証版 v4.0</span></h1><div class="sub">カードの表・裏 / 透視補正 / たわみ補正 / センタリング比率測定</div></header><main>
+<section class="card"><h2>1. 画像を選択</h2><div class="row"><label class="upload primary">写真を撮る・選ぶ<input id="file" type="file" accept="image/*" capture="environment"></label><label class="upload">写真ライブラリ<input id="gallery" type="file" accept="image/*"></label></div><p class="hint">画像は端末内だけで処理します。サーバーへ送信しません。カメラ撮影時はカードの四隅が写るようにしてください。</p><div class="seg" style="margin-top:12px"><button id="front" class="active">表面モード</button><button id="back">裏面モード</button></div></section>
+<section class="card" id="editPanel"><h2 id="editTitle">① 四隅を決める <span class="badge" id="cornerStatus">画像未選択</span></h2><div class="canvaswrap"><canvas id="source" width="500" height="350"></canvas><canvas id="magSource" class="magnifier" width="400" height="400"></canvas></div><p class="hint" id="editHint">緑の4点をカード外周の角へ合わせてください。画像を読み込むと手前のカード外周の候補を自動推定します。緑の点がずれた場合だけ指で修正してください。</p>
+<div class="corner-controls" id="cornerNudgeTools"><span class="badge">微調整する角</span><button type="button" data-corner="0" aria-label="角1を選択">1</button><button type="button" data-corner="1" aria-label="角2を選択">2</button><button type="button" data-corner="2" aria-label="角3を選択">3</button><button type="button" data-corner="3" aria-label="角4を選択">4</button><div class="arrow-row"><div class="corner-arrows" aria-label="選択中の角を微調整"><button type="button" class="up" data-nudge="0,-1" aria-label="上へ1ピクセル">⌃</button><button type="button" class="left" data-nudge="-1,0" aria-label="左へ1ピクセル">‹</button><span class="pad-center" aria-hidden="true"></span><button type="button" class="right" data-nudge="1,0" aria-label="右へ1ピクセル">›</button><button type="button" class="down" data-nudge="0,1" aria-label="下へ1ピクセル">⌄</button></div></div></div><div class="row" id="cornerTools" style="margin-top:11px"><button id="detect">別候補を表示</button><button id="reset">四隅を初期化</button><button id="toCurve" class="primary">次へ：たわみ調整 →</button></div>
+<div id="curveTools" class="hidden" style="margin-top:11px"><div class="corner-controls" id="curveNudgeTools"><span class="badge">調整する辺</span><button type="button" data-curve-side="0" class="selected">上</button><button type="button" data-curve-side="1">右</button><button type="button" data-curve-side="2">下</button><button type="button" data-curve-side="3">左</button><div class="arrow-row"><div class="corner-arrows" aria-label="選択中のたわみを調整"><button type="button" class="up" data-curve-nudge="0,-1" aria-label="上へ">⌃</button><button type="button" class="left" data-curve-nudge="-1,0" aria-label="左へ">‹</button><span class="pad-center" aria-hidden="true"></span><button type="button" class="right" data-curve-nudge="1,0" aria-label="右へ">›</button><button type="button" class="down" data-curve-nudge="0,1" aria-label="下へ">⌄</button></div></div></div><div class="row" style="margin-top:10px"><button id="autoCurveBtn">外周を再評価</button><button id="curveReset">たわみ点を初期化</button><button id="curveToggle">たわみ補正：ON</button></div><div class="status hidden" id="curveStatus" role="status" style="margin-top:10px">四隅を決めてください。</div><div class="row" style="margin-top:12px"><button id="backCorners">← 四隅に戻る</button><button id="warp" class="primary">正面表示 →</button></div></div></section>
+<section class="card hidden" id="resultPanel"><h2>③ 正面表示・印刷領域の境界を指定</h2><div class="canvaswrap"><canvas id="rectified" width="440" height="614"></canvas><canvas id="magRect" class="magnifier" width="400" height="400"></canvas></div><div class="finebar"><span class="badge">微調整する線</span><button data-edge="l">左 L</button><button data-edge="r">右 R</button><button data-edge="t">上 T</button><button data-edge="b">下 B</button></div><div class="finebar" id="printNudgeTools"><div class="arrow-row"><div class="corner-arrows print-arrows" aria-label="選択中の印刷境界を微調整"><button type="button" class="up" data-print-nudge="0,-1" aria-label="上へ0.5ピクセル">⌃</button><button type="button" class="left" data-print-nudge="-1,0" aria-label="左へ0.5ピクセル">‹</button><span class="pad-center" aria-hidden="true"></span><button type="button" class="right" data-print-nudge="1,0" aria-label="右へ0.5ピクセル">›</button><button type="button" class="down" data-print-nudge="0,1" aria-label="下へ0.5ピクセル">⌄</button></div></div><span id="printNudgeHint" class="corner-current">左右の線：← →</span></div><p class="hint">ピンクの4本線が印刷領域の境界です。自動推定は辺の連続性に加え、カードの縦横比に近い印刷領域を候補選択の手掛かりとして使います（絵柄で内枠の比率は変わるため、補助的な判断です）。線を指で動かすか、十字キーで微調整してください。特にSAR・ARなど枠が不明確な表面は誤認識する場合があります。</p><div class="row" style="margin-top:11px"><button id="backCurve">← たわみ調整に戻る</button><button id="autoInner">印刷境界を自動推定</button><button id="defaultInner">境界を初期化</button><button id="save" class="primary">測定画像を保存</button></div></section>
+<section class="card hidden" id="searchPanel"><h2>④ Googleレンズでカードを画像検索</h2>
+<p class="hint">iPhoneで動作を確認できた「Googleで検索」への画像共有を使います。補正画像を手動保存する必要はありません。</p>
+<div class="row" style="margin-top:12px"><button id="shareSearchImage" class="primary">補正画像をGoogleで検索・共有</button><button id="showSearchImage">補正画像を確認</button></div>
+<p class="hint"><strong style="color:#eaf3ff">共有メニューが出たら：</strong>「Googleで検索」を選択 → Googleアプリに表示された「Google レンズで画像を検索」を押します。検索後は左上の戻る操作などで元の画面に戻れます。</p>
+<div id="searchImageBox" class="hidden" style="margin-top:12px"><p class="hint">検索に渡す補正済み画像です。画像の確認用です。</p><img id="searchImagePreview" alt="画像検索用の補正済みカード" style="display:block;width:min(100%,440px);height:auto;margin:10px auto;border:1px solid #476078;border-radius:8px;-webkit-touch-callout:default;user-select:auto"></div>
+<div class="status" id="searchStatus" role="status" style="margin-top:10px">正面補正後に利用できます。</div>
+<p class="hint">Googleアプリ側の「Google レンズで画像を検索」を押す操作は必要です。HTMLからGoogleレンズの検索結果を直接開く機能ではありません。</p></section>
+<section class="card hidden" id="metricsPanel"><h2>測定結果</h2><div class="results"><div class="metric"><small>左右（左 : 右）</small><strong id="lr">-- : --</strong><small id="lrpx">画像を選択してください</small></div><div class="metric"><small>上下（上 : 下）</small><strong id="tb">-- : --</strong><small id="tbpx">画像を選択してください</small></div></div><div class="status" id="psaGuide" style="margin-top:12px">PSA10のセンタリング目安：表面55:45以内／裏面75:25以内（左右・上下とも）。</div><div class="status" id="status" style="margin-top:9px">画像を読み込むと測定を開始できます。</div><p class="hint">数値は画像上の余白の比率です。PSAの鑑定結果・グレードを保証するものではありません。撮影時のレンズ歪みや、印刷境界の誤認識により誤差が生じます。</p></section>
+<footer>検証版 v4.0 / Safari（iPhone）向け単一HTML。外部ライブラリ不要・オフライン処理。たわみ推定は確信度が低い場合には適用しません。自動確定できない辺は直線のままにします。検出候補を切り替えられます。実カード写真での精度は未検証です。</footer>
+</main><script>
+'use strict';
+const $=id=>document.getElementById(id);const source=$('source'),sctx=source.getContext('2d'),rect=$('rectified'),rctx=rect.getContext('2d',{willReadFrequently:true});
+let stage=1;let original=null,points=[],curvePoints=[],edgeTracks=null,apexTs=[.5,.5,.5,.5],curveEnabled=false,inner={l:.08,r:.92,t:.07,b:.93},mode='front',corrected=null,innerValid=false,manualEdges=new Set(),active=null,dragged=false,selectedEdge='l',selectedCorner=0,selectedCurveSide=0;
+const W=440,H=614;rect.width=W;rect.height=H;
+function setStatus(msg){$('status').textContent=msg}function showStage(n){stage=n;$('editPanel').classList.toggle('hidden',n===3);$('resultPanel').classList.toggle('hidden',n!==3);$('metricsPanel').classList.toggle('hidden',n!==3);$('searchPanel').classList.toggle('hidden',n!==3);$('cornerTools').classList.toggle('hidden',n!==1);$('cornerNudgeTools').classList.toggle('hidden',n!==1);$('curveTools').classList.toggle('hidden',n!==2);$('editTitle').firstChild.textContent=n===1?'① 四隅を決める ':'② たわみを調整 ';$('editHint').textContent=n===1?'点をドラッグ、または番号と十字キーで調整します。':'青い点を十字キーまたはドラッグで調整します。';if(original)drawSource();hideMagnifiers();}function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+function drawEmpty(){sctx.fillStyle='#0a1423';sctx.fillRect(0,0,source.width,source.height);sctx.fillStyle='#9db0c6';sctx.textAlign='center';sctx.font='16px sans-serif';sctx.fillText('写真を読み込んでください',source.width/2,source.height/2);rctx.fillStyle='#0a1423';rctx.fillRect(0,0,W,H);rctx.fillStyle='#9db0c6';rctx.textAlign='center';rctx.font='16px sans-serif';rctx.fillText('補正後の画像',W/2,H/2)}drawEmpty();
+function updateCornerControls(){document.querySelectorAll('[data-corner]').forEach(b=>b.classList.toggle('selected',Number(b.dataset.corner)===selectedCorner));}function selectCurveSide(index){selectedCurveSide=clamp(index,0,3);document.querySelectorAll('[data-curve-side]').forEach(b=>b.classList.toggle('selected',Number(b.dataset.curveSide)===selectedCurveSide));if(original&&stage===2&&curvePoints[selectedCurveSide])showMagnifier('source',curvePoints[selectedCurveSide].x,curvePoints[selectedCurveSide].y);}document.querySelectorAll('[data-curve-side]').forEach(b=>b.onclick=()=>selectCurveSide(Number(b.dataset.curveSide)));
+function selectCorner(index){selectedCorner=clamp(index,0,3);updateCornerControls();if(original)drawSource();if(original&&points[selectedCorner])showMagnifier('source',points[selectedCorner].x,points[selectedCorner].y);}
+function nudgeCorner(dx,dy,step=1){if(!original||stage!==1||points.length!==4)return;const p=points[selectedCorner];p.x=clamp(p.x+dx*step,0,source.width-1);p.y=clamp(p.y+dy*step,0,source.height-1);edgeTracks=null;resetCurvePoints();drawSource();showMagnifier('source',p.x,p.y);}function nudgeCurve(dx,dy,step=1){if(!original||stage!==2||!curveEnabled||curvePoints.length!==4)return;const p=curvePoints[selectedCurveSide];moveCurveApex(selectedCurveSide,{x:p.x+dx*step,y:p.y+dy*step});drawSource();showMagnifier('source',curvePoints[selectedCurveSide].x,curvePoints[selectedCurveSide].y)}
+document.querySelectorAll('[data-corner]').forEach(b=>b.onclick=()=>selectCorner(Number(b.dataset.corner)));
+let repeatDelay=null,repeatInterval=null;function stopNudgeRepeat(){clearTimeout(repeatDelay);clearInterval(repeatInterval);repeatDelay=repeatInterval=null}function bindHoldRepeat(selector,readDelta,apply){document.querySelectorAll(selector).forEach(button=>{button.addEventListener('pointerdown',e=>{if(button.disabled)return;e.preventDefault();stopNudgeRepeat();const [dx,dy]=readDelta(button);apply(dx,dy);try{button.setPointerCapture(e.pointerId)}catch(_){}repeatDelay=setTimeout(()=>{repeatInterval=setInterval(()=>apply(dx,dy),85)},350)});['pointerup','pointercancel','lostpointercapture'].forEach(name=>button.addEventListener(name,stopNudgeRepeat));button.addEventListener('click',e=>{if(e.detail===0&&!button.disabled){const [dx,dy]=readDelta(button);apply(dx,dy)}})})}bindHoldRepeat('[data-nudge]',b=>b.dataset.nudge.split(',').map(Number),(dx,dy)=>nudgeCorner(dx,dy));bindHoldRepeat('[data-print-nudge]',b=>b.dataset.printNudge.split(',').map(Number),(dx,dy)=>movePrintEdge(dx,dy));bindHoldRepeat('[data-curve-nudge]',b=>b.dataset.curveNudge.split(',').map(Number),(dx,dy)=>nudgeCurve(dx,dy));window.addEventListener('pointerup',stopNudgeRepeat);window.addEventListener('pointercancel',stopNudgeRepeat);document.querySelectorAll('.canvaswrap').forEach(el=>{el.addEventListener('contextmenu',e=>e.preventDefault());el.addEventListener('selectstart',e=>e.preventDefault())});
+document.addEventListener('keydown',e=>{if(e.altKey||e.ctrlKey||e.metaKey)return;if(e.target&&['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName))return;const keys={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]};const delta=keys[e.key];if(!delta)return;if(stage===1&&original){e.preventDefault();nudgeCorner(delta[0],delta[1],e.shiftKey?5:1);return}if(stage===2&&original&&curveEnabled){e.preventDefault();nudgeCurve(delta[0],delta[1],e.shiftKey?5:1);return}if(stage===3&&corrected){const horizontal=selectedEdge==='l'||selectedEdge==='r',step=horizontal?delta[0]:delta[1];if(step){e.preventDefault();movePrintEdge(delta[0],delta[1]);}}});
+function midpoint(a,b){return{x:(a.x+b.x)/2,y:(a.y+b.y)/2}}
+function project(m,x,y){const d=m[6]*x+m[7]*y+1;return{x:(m[0]*x+m[1]*y+m[2])/d,y:(m[3]*x+m[4]*y+m[5])/d}}
+function straightMids(){if(points.length!==4)return [];const m=homography(points);if(!m)return [midpoint(points[0],points[1]),midpoint(points[1],points[2]),midpoint(points[2],points[3]),midpoint(points[3],points[0])];return [project(m,(W-1)/2,0),project(m,W-1,(H-1)/2),project(m,(W-1)/2,H-1),project(m,0,(H-1)/2)]}
+function resetCurvePoints(){apexTs=[.5,.5,.5,.5];curvePoints=straightMids();edgeTracks=null}
+// Move an apex in both dimensions: along the edge changes its position t,
+// across the edge changes the signed bend. Keep it close to the card rim.
+function moveCurveApex(side,pointer){
+ const m=homography(points);if(!m)return;
+ const n=edgeNormal(side);
+ let bestT=.5,bestDist=Infinity;
+ // A projectively transformed straight edge is a line, but t is not linear
+ // in image coordinates. Search the actual projected baseline.
+ for(let j=0;j<=180;j++){
+   const t=.05+.90*j/180,base=baselineAt(side,t,m);
+   const dx=pointer.x-base.x,dy=pointer.y-base.y;
+   const along=dx*n.y-dy*n.x;
+   if(Math.abs(along)<bestDist){bestDist=Math.abs(along);bestT=t}
+ }
+ // Refine the projected position to sub-sample precision.
+ let step=.005;
+ for(let pass=0;pass<5;pass++){
+   let next=bestT,score=Infinity;
+   for(const t of [bestT-step,bestT,bestT+step]){
+     if(t<.05||t>.95)continue;
+     const b=baselineAt(side,t,m),dx=pointer.x-b.x,dy=pointer.y-b.y;
+     const along=dx*n.y-dy*n.x;
+     if(Math.abs(along)<score){score=Math.abs(along);next=t}
+   }
+   bestT=next;step*=.4;
+ }
+ const base=baselineAt(side,bestT,m);
+ const signed=(pointer.x-base.x)*n.x+(pointer.y-base.y)*n.y;
+ const a=points[side],b=points[(side+1)%4];
+ const length=Math.hypot(b.x-a.x,b.y-a.y);
+ const maxBend=Math.min(12,Math.max(3,length*.025));
+ const bend=clamp(signed,-maxBend,maxBend);
+ apexTs[side]=bestT;
+ curvePoints[side]={x:base.x+n.x*bend,y:base.y+n.y*bend};
+ // A manual apex is a single editable curve, not an old auto track.
+ edgeTracks=null;
+}
+function edgeNormal(side){const a=points[side],b=points[(side+1)%4],len=Math.hypot(b.x-a.x,b.y-a.y)||1;return {x:-(b.y-a.y)/len,y:(b.x-a.x)/len}}
+function baselineAt(side,t,m){const uv=edgeUV(side,t);return project(m,uv[0]*(W-1),uv[1]*(H-1))}
+function peakShape(t,t0){if(t0<=0||t0>=1)return 4*t*(1-t);if(t<=t0){const v=t/t0;return Math.sin(v*Math.PI/2)**2}const v=(1-t)/(1-t0);return Math.sin(v*Math.PI/2)**2}
+function sideOffset(side,t,m){
+ // The user's four corners are immutable anchors: every edge displacement is
+ // exactly zero at both endpoints, even if a tracked edge has noisy samples.
+ if(t<=0||t>=1)return 0;
+ const normal=edgeNormal(side),at=apexTs[side],base=baselineAt(side,at,m),pt=curvePoints[side];
+ if(!pt)return 0;
+ const manual=(pt.x-base.x)*normal.x+(pt.y-base.y)*normal.y;
+ const track=edgeTracks&&edgeTracks[side];
+ if(!track)return manual*peakShape(t,at);
+ const first=track[0],last=track[track.length-1];
+ const raw=interpolateOffset(track,t),rawAt=interpolateOffset(track,at);
+ const anchored=raw-((1-t)*first+t*last);
+ const anchoredAt=rawAt-((1-at)*first+at*last);
+ return anchored+(manual-anchoredAt)*peakShape(t,at);
+}
+function drawSource(){if(!original)return;sctx.clearRect(0,0,source.width,source.height);sctx.drawImage(original,0,0,source.width,source.height);sctx.strokeStyle='#5eead4';sctx.lineWidth=2.5;sctx.beginPath();points.forEach((p,i)=>i?sctx.lineTo(p.x,p.y):sctx.moveTo(p.x,p.y));sctx.closePath();sctx.stroke();if(stage===2&&curveEnabled&&curvePoints.length===4){const m=homography(points);if(m){sctx.setLineDash([]);sctx.beginPath();for(let side=0;side<4;side++){const n=edgeNormal(side);for(let j=0;j<=48;j++){const t=j/48,p=baselineAt(side,t,m),d=sideOffset(side,t,m),x=p.x+n.x*d,y=p.y+n.y*d;if(side===0&&j===0)sctx.moveTo(x,y);else sctx.lineTo(x,y)}}sctx.closePath();sctx.save();sctx.strokeStyle='#00e5ff';sctx.lineWidth=5.5;sctx.setLineDash([15,6]);sctx.stroke();sctx.restore()}curvePoints.forEach((p,i)=>{sctx.beginPath();sctx.arc(p.x,p.y,10,0,Math.PI*2);sctx.fillStyle='#60a5fa';sctx.fill();sctx.strokeStyle='#142c51';sctx.lineWidth=2;sctx.stroke();sctx.fillStyle='#0b1220';sctx.textAlign='center';sctx.font='bold 11px sans-serif';sctx.fillText(['上','右','下','左'][i],p.x,p.y+4)})}points.forEach((p,i)=>{sctx.beginPath();sctx.arc(p.x,p.y,14,0,Math.PI*2);sctx.strokeStyle=i===selectedCorner?'#fbbf24':'transparent';sctx.lineWidth=i===selectedCorner?3:0;sctx.stroke();sctx.beginPath();sctx.arc(p.x,p.y,11,0,Math.PI*2);sctx.fillStyle='#5eead4';sctx.fill();sctx.strokeStyle='#083c37';sctx.lineWidth=2;sctx.stroke();sctx.fillStyle='#052e2b';sctx.font='bold 12px sans-serif';sctx.textAlign='center';sctx.fillText(String(i+1),p.x,p.y+4)});updateCornerControls()}
+// Magnifier samples the clean image, not the painted handles, and places a crosshair at the actual selection.
+function showMagnifier(which,x,y){
+ const isSource=which==='source',canvas=isSource?source:rect,mag=$(isSource?'magSource':'magRect');
+ // In the curve stage, show a wider area along the selected edge.
+ // Top/bottom: landscape; left/right: portrait. Keep the magnification uniform.
+ const curveMag=isSource&&stage===2;
+ const side=curveMag?(active!==null&&active>=4&&active<=7?active-4:selectedCurveSide):-1;
+ const horizontal=side===0||side===2;
+ const vertical=side===1||side===3;
+ mag.classList.toggle('curve-horizontal',curveMag&&horizontal);
+ mag.classList.toggle('curve-vertical',curveMag&&vertical);
+ mag.width=curveMag&&horizontal?560:curveMag&&vertical?320:400;
+ mag.height=curveMag&&horizontal?320:curveMag&&vertical?560:400;
+ const mc=mag.getContext('2d'),zoom=curveMag?5:3.5;
+ const viewX=mag.width/zoom,viewY=mag.height/zoom;
+ const temp=document.createElement('canvas');temp.width=canvas.width;temp.height=canvas.height;
+ const tc=temp.getContext('2d');
+ if(isSource&&original)tc.drawImage(original,0,0,temp.width,temp.height);
+ else if(corrected)tc.putImageData(corrected,0,0);
+ mc.clearRect(0,0,mag.width,mag.height);mc.imageSmoothingEnabled=false;
+ mc.drawImage(temp,x-viewX/2,y-viewY/2,viewX,viewY,0,0,mag.width,mag.height);
+ // Stage 1 and 2: show the original four-corner outline inside the magnifier.
+ // Use exactly the same transform as the image crop so the guide is registered.
+ if(isSource&&(stage===1||stage===2)&&points.length===4){
+  const sx=mag.width/viewX,sy=mag.height/viewY;
+  const tx=px=>(px-(x-viewX/2))*sx,ty=py=>(py-(y-viewY/2))*sy;
+  mc.save();mc.beginPath();mc.rect(0,0,mag.width,mag.height);mc.clip();
+  mc.strokeStyle='#5eead4';mc.lineWidth=3;mc.setLineDash([]);
+  mc.beginPath();points.forEach((p,i)=>{if(i===0)mc.moveTo(tx(p.x),ty(p.y));else mc.lineTo(tx(p.x),ty(p.y))});mc.closePath();mc.stroke();
+  for(const p of points){mc.beginPath();mc.arc(tx(p.x),ty(p.y),5,0,2*Math.PI);mc.fillStyle='#5eead4';mc.fill()}
+  // Show the current curved outer edge in the same magnified coordinates.
+  // This is the blue dashed guide drawn on the main source canvas.
+  if(stage===2&&curveEnabled&&curvePoints.length===4){
+   const m=homography(points);
+   if(m){
+    mc.setLineDash([]);
+    mc.beginPath();
+    for(let side=0;side<4;side++){
+     const n=edgeNormal(side);
+     for(let j=0;j<=48;j++){
+      const t=j/48,p=baselineAt(side,t,m),d=sideOffset(side,t,m);
+      const xx=tx(p.x+n.x*d),yy=ty(p.y+n.y*d);
+      if(side===0&&j===0)mc.moveTo(xx,yy);else mc.lineTo(xx,yy);
+     }
+    }
+    mc.closePath();mc.strokeStyle='#00e5ff';mc.lineWidth=6;mc.setLineDash([16,7]);mc.stroke();mc.setLineDash([]);
+   }
+  }
+  mc.restore();
+ }
+ mc.strokeStyle=isSource?'#ffdc62':'#ff5ca8';mc.lineWidth=2;mc.beginPath();mc.moveTo(mag.width/2,0);mc.lineTo(mag.width/2,mag.height);mc.moveTo(0,mag.height/2);mc.lineTo(mag.width,mag.height/2);mc.stroke();
+ mc.fillStyle='#fff';mc.font='bold 19px sans-serif';mc.fillText('×'+zoom.toFixed(1),12,25);
+ // In curve mode, place the loupe opposite the selected edge.
+ if(curveMag){
+  mag.style.transform='';
+  if(side===0){mag.style.left='50%';mag.style.right='auto';mag.style.top='auto';mag.style.bottom='9px';mag.style.transform='translateX(-50%)';}
+  else if(side===2){mag.style.left='50%';mag.style.right='auto';mag.style.top='9px';mag.style.bottom='auto';mag.style.transform='translateX(-50%)';}
+  else if(side===1){mag.style.left='9px';mag.style.right='auto';mag.style.top='50%';mag.style.bottom='auto';mag.style.transform='translateY(-50%)';}
+  else{mag.style.left='auto';mag.style.right='9px';mag.style.top='50%';mag.style.bottom='auto';mag.style.transform='translateY(-50%)';}
+ }else{
+  const rightHalf=x>=canvas.width/2,lowerHalf=y>=canvas.height/2;
+  mag.style.left=rightHalf?'9px':'auto';mag.style.right=rightHalf?'auto':'9px';
+  mag.style.top=lowerHalf?'9px':'auto';mag.style.bottom=lowerHalf?'auto':'9px';mag.style.transform='';
+ }
+ mag.classList.add('visible');
+}
+function hideMagnifiers(){$('magSource').classList.remove('visible');$('magRect').classList.remove('visible')}
+function chooseEdge(edge,showZoom=true){selectedEdge=edge;document.querySelectorAll('[data-edge]').forEach(b=>b.classList.toggle('selected',b.dataset.edge===edge));updatePrintNudgeUI();if(corrected&&showZoom){const x=(edge==='l'?inner.l:edge==='r'?inner.r:.5)*W,y=(edge==='t'?inner.t:edge==='b'?inner.b:.5)*H;showMagnifier('rect',x,y)}}
+function updatePrintNudgeUI(){const horizontal=selectedEdge==='l'||selectedEdge==='r';document.querySelectorAll('[data-print-nudge]').forEach(b=>{const [dx,dy]=b.dataset.printNudge.split(',').map(Number);b.disabled=horizontal?dx===0:dy===0});const hint=$('printNudgeHint');if(hint)hint.textContent=horizontal?'左右の線：← →':'上下の線：↑ ↓'}function movePrintEdge(dx,dy){if(!corrected)return;const horizontal=selectedEdge==='l'||selectedEdge==='r',delta=horizontal?dx:dy;if(delta)nudge(delta*.5)}function nudge(delta){if(!corrected)return;const e=selectedEdge;manualEdges.add(({l:4,r:5,t:6,b:7})[e]);if(manualEdges.size===4)innerValid=true;if(e==='l')inner.l=clamp(inner.l+delta/W,.005,inner.r-.015);if(e==='r')inner.r=clamp(inner.r+delta/W,inner.l+.015,.995);if(e==='t')inner.t=clamp(inner.t+delta/H,.005,inner.b-.015);if(e==='b')inner.b=clamp(inner.b+delta/H,inner.t+.015,.995);drawRect();chooseEdge(e)}
+document.querySelectorAll('[data-edge]').forEach(b=>b.onclick=()=>chooseEdge(b.dataset.edge));
+chooseEdge('l',false);
+function defaultPoints(){let w=source.width,h=source.height;points=[{x:w*.1,y:h*.1},{x:w*.9,y:h*.1},{x:w*.9,y:h*.9},{x:w*.1,y:h*.9}];selectedCorner=0;resetCurvePoints();drawSource()}
+function loadFile(file){if(!file)return;const url=URL.createObjectURL(file),img=new Image();img.onload=()=>{const ratio=Math.min(1,1000/Math.max(img.naturalWidth,img.naturalHeight));const c=document.createElement('canvas');c.width=Math.max(1,Math.round(img.naturalWidth*ratio));c.height=Math.max(1,Math.round(img.naturalHeight*ratio));c.getContext('2d').drawImage(img,0,0,c.width,c.height);original=c;const scale=Math.min(700/c.width,700/c.height);source.width=Math.round(c.width*scale);source.height=Math.round(c.height*scale);defaultPoints();cornerCandidates=[];candidateIndex=0;curveEnabled=false;showStage(1);corrected=null;inner={l:.08,r:.92,t:.07,b:.93};drawRect();applyAutoCorners();URL.revokeObjectURL(url)};img.onerror=()=>{setStatus('画像を読み込めませんでした。');URL.revokeObjectURL(url)};img.src=url}
+$('file').onchange=e=>loadFile(e.target.files[0]);$('gallery').onchange=e=>loadFile(e.target.files[0]);
+function getPos(e,canvas){const b=canvas.getBoundingClientRect();return{x:(e.clientX-b.left)*canvas.width/b.width,y:(e.clientY-b.top)*canvas.height/b.height}}
+source.addEventListener('pointerdown',e=>{if(!original)return;const p=getPos(e,source);let min=Infinity,idx=-1;if(stage===1)points.forEach((v,i)=>{let d=Math.hypot(p.x-v.x,p.y-v.y);if(d<min){min=d;idx=i}});if(stage===2&&curveEnabled)curvePoints.forEach((v,i)=>{let d=Math.hypot(p.x-v.x,p.y-v.y);if(d<min){min=d;idx=i+4}});if(min<55){if(stage===1&&idx<4)selectCorner(idx);active=idx;if(stage===2&&idx>=4)selectCurveSide(idx-4);source.setPointerCapture(e.pointerId);const pt=idx<4?points[idx]:curvePoints[idx-4];showMagnifier('source',pt.x,pt.y);e.preventDefault()}});
+source.addEventListener('pointermove',e=>{if(active===null)return;const p=getPos(e,source);const pt={x:clamp(p.x,0,source.width),y:clamp(p.y,0,source.height)};if(active<4){points[active]=pt;edgeTracks=null}else{moveCurveApex(active-4,pt)}drawSource();const shown=active<4?points[active]:curvePoints[active-4];showMagnifier('source',shown.x,shown.y);e.preventDefault()});
+function stopSource(){const was=active;if(was!==null&&was<4){resetCurvePoints()}active=null;if(!(stage===2&&was!==null&&was>=4))hideMagnifiers();if(was!==null&&corrected){renderWarp(false)}}source.addEventListener('pointerup',stopSource);source.addEventListener('pointercancel',stopSource);
+$('reset').onclick=()=>{if(original)defaultPoints()};
+$('toCurve').onclick=()=>{if(!original)return;if(!validQuad()){setStatus('四隅の配置を確認してください。');return}resetCurvePoints();curveEnabled=true;const detected=autoCurve();showStage(2);$('curveStatus').textContent='自動推定：'+detected.count+'/4辺。'+detected.notes.join('／')+'。青い点を辺に沿って動かすと、青い破線の頂点も移動します。実際の縁と一致するか確認してください。';setStatus($('curveStatus').textContent)};$('backCorners').onclick=()=>{curveEnabled=false;showStage(1)};$('backCurve').onclick=()=>{showStage(2)};$('autoCurveBtn').onclick=()=>{if(!original)return;const result=autoCurve();curveEnabled=true;drawSource();$('curveStatus').textContent='自動推定：'+result.count+'/4辺。'+result.notes.join('／');setStatus($('curveStatus').textContent)};$('curveToggle').onclick=()=>{curveEnabled=!curveEnabled;if(curveEnabled&&curvePoints.length!==4)resetCurvePoints();$('curveToggle').textContent='たわみ補正：'+(curveEnabled?'ON':'OFF');$('curveToggle').classList.toggle('primary',curveEnabled);if(original)drawSource();if(corrected)renderWarp(false);setStatus(curveEnabled?'青い点を弧の頂点に合わせてください。':'通常の四隅透視補正に戻しました。')};
+$('curveReset').onclick=()=>{if(!original)return;resetCurvePoints();drawSource();if(corrected)renderWarp(false);setStatus('たわみ点を初期位置に戻しました。')};
+// Detect long outer boundaries, not simply the brightest pixel or biggest blob.
+// Search independent pairs of near-vertical and near-horizontal lines, then intersect.
+// v1.3: distinct edge-pair detector. It searches the entire image for the
+// bright, low-chroma card rim separating the print from the background.
+// It does not refine/reuse the previous corner locations.
+let cornerCandidates=[],candidateIndex=0;
+function detectFrontCardCorners(){
+ const w=source.width,h=source.height;
+ if(w<120||h<160)return {ok:false,reason:'画像の解像度が不足しています'};
+ const c=document.createElement('canvas');c.width=w;c.height=h;
+ const ctx=c.getContext('2d',{willReadFrequently:true});ctx.drawImage(original,0,0,w,h);
+ const rgba=ctx.getImageData(0,0,w,h).data;
+ const light=new Float32Array(w*h),neutral=new Float32Array(w*h);
+ for(let i=0;i<w*h;i++){
+  const k=i*4,r=rgba[k],g=rgba[k+1],b=rgba[k+2];
+  light[i]=.299*r+.587*g+.114*b;
+  neutral[i]=255-(Math.max(r,g,b)-Math.min(r,g,b));
+ }
+ function pixel(arr,x,y){x=Math.round(x);y=Math.round(y);if(x<2||y<2||x>=w-2||y>=h-2)return 0;return arr[y*w+x]}
+ // Search complete bands, independently for each of the four sides.
+ // The characteristic signal is an outer brightness step followed by a
+ // lighter/less saturated border strip on the inside of the card.
+ function sideCandidates(vertical,which){
+  const dim=vertical?w:h,other=vertical?h:w;
+  const inward=which==='left'||which==='top'?1:-1;
+  const low=inward===1?.035:.55,high=inward===1?.45:.965;
+  const results=[];
+  const step=Math.max(1,Math.round(dim/310));
+  for(let slope=-.36;slope<=.36+1e-5;slope+=.024){
+   for(let pos=Math.round(dim*low);pos<dim*high;pos+=step){
+    let total=0,valid=0,good=0;
+    const n=51;
+    for(let j=0;j<n;j++){
+     const v=other*(.11+.78*j/(n-1));
+     const q=pos+slope*(v-other/2);
+     if(q<8||q>dim-9)continue;
+     const coord=d=>vertical?[q+inward*d,v]:[v,q+inward*d];
+     const get=(arr,d)=>{const xy=coord(d);return pixel(arr,xy[0],xy[1])};
+     const outside=(get(light,-7)+get(light,-4))/2;
+     const rim=(get(light,3)+get(light,6)+get(light,9))/3;
+     const rimNeutral=(get(neutral,3)+get(neutral,6)+get(neutral,9))/3;
+     const deep=(get(light,18)+get(light,23))/2;
+     const edge=Math.abs(get(light,2)-get(light,-3));
+     const outerStep=rim-outside;
+     const printStep=Math.abs(rim-deep);
+     // Rim and background need not be white; both edge strength and
+     // a consistent lighter neutral rim are rewarded.
+     const signal=Math.max(0,outerStep)*.70+Math.min(45,edge)*.28+
+       Math.max(0,rimNeutral-160)*.06+Math.min(32,printStep)*.16;
+     const evidence=outerStep>6&&edge>6;
+     if(evidence)good++;
+     total+=Math.min(85,signal);valid++;
+    }
+    if(valid<n*.92)continue;
+    const coverage=good/valid;
+    if(coverage<.25)continue;
+    const score=total/valid*(.65+.35*coverage);
+    results.push({a:slope,b:pos,score,coverage});
+   }
+  }
+  results.sort((a,b)=>b.score-a.score);
+  // Keep genuinely different lines instead of near-identical votes.
+  const unique=[];
+  for(const item of results){
+   if(unique.every(v=>Math.abs(v.b-item.b)>Math.max(8,dim*.025)||Math.abs(v.a-item.a)>.07))unique.push(item);
+   if(unique.length===8)break;
+  }
+  return unique;
+ }
+ const left=sideCandidates(true,'left'),right=sideCandidates(true,'right'),top=sideCandidates(false,'top'),bottom=sideCandidates(false,'bottom');
+ if([left,right,top,bottom].some(a=>a.length===0))return {ok:false,reason:'カードの外周候補が見つかりません'};
+ function intersection(v,hor){
+  const den=1-v.a*hor.a;
+  if(Math.abs(den)<.1)return null;
+  const y=(hor.b+hor.a*(v.b-w/2-v.a*h/2))/den;
+  return {x:v.b+v.a*(y-h/2),y};
+ }
+ const proposals=[];
+ // Evaluate candidate combinations as complete quadrilaterals, not
+ // four independently strongest lines (which can belong to other cards).
+ for(const l of left.slice(0,5))for(const r of right.slice(0,5))
+ for(const t of top.slice(0,5))for(const b of bottom.slice(0,5)){
+  const q=[intersection(l,t),intersection(r,t),intersection(r,b),intersection(l,b)];
+  if(q.some(p=>!p||!Number.isFinite(p.x)||!Number.isFinite(p.y)||p.x<2||p.y<2||p.x>w-2||p.y>h-2))continue;
+  const width=(Math.hypot(q[1].x-q[0].x,q[1].y-q[0].y)+Math.hypot(q[2].x-q[3].x,q[2].y-q[3].y))/2;
+  const height=(Math.hypot(q[3].x-q[0].x,q[3].y-q[0].y)+Math.hypot(q[2].x-q[1].x,q[2].y-q[1].y))/2;
+  const ratio=width/height,area=width*height/(w*h);
+  if(ratio<.51||ratio>.85||area<.22||area>.90)continue;
+  const midx=q.reduce((s,p)=>s+p.x,0)/4,midy=q.reduce((s,p)=>s+p.y,0)/4;
+  const centerPenalty=Math.hypot((midx-w/2)/w,(midy-h/2)/h);
+  const shapePenalty=Math.abs(Math.log(ratio/.715));
+  const evidence=(l.score+r.score+t.score+b.score)/4;
+  const score=evidence-15*shapePenalty-9*centerPenalty+3*area;
+  proposals.push({points:q,score,coverage:Math.min(l.coverage,r.coverage,t.coverage,b.coverage)});
+ }
+ proposals.sort((a,b)=>b.score-a.score);
+ const unique=[];
+ for(const p of proposals){
+  if(unique.every(o=>o.points.reduce((s,v,i)=>s+Math.hypot(v.x-p.points[i].x,v.y-p.points[i].y),0)/4>Math.max(10,w*.02)))unique.push(p);
+  if(unique.length>=6)break;
+ }
+ if(!unique.length)return {ok:false,reason:'カード形状として整合する外周が見つかりません'};
+ return {ok:true,candidates:unique};
+}
+function applyAutoCorners(nextCandidate=false){
+ if(!original)return;
+ if(!nextCandidate||!cornerCandidates.length){
+  const result=detectFrontCardCorners();
+  if(!result.ok){$('cornerStatus').textContent='自動検出できず';setStatus(result.reason+'。四隅を手動で調整してください。');return result;}
+  cornerCandidates=result.candidates;candidateIndex=0;
+ }else candidateIndex=(candidateIndex+1)%cornerCandidates.length;
+ points=cornerCandidates[candidateIndex].points.map(p=>({...p}));
+ selectedCorner=0;resetCurvePoints();drawSource();
+ $('cornerStatus').textContent='外周候補 '+(candidateIndex+1)+'/'+cornerCandidates.length+'・要確認';
+ setStatus('外周の候補 '+(candidateIndex+1)+'/'+cornerCandidates.length+'。違うカードや印刷境界を拾った場合は「別候補」を押してください。');
+ return {ok:true,points};
+}
+$('detect').textContent='別候補を表示';
+$('detect').onclick=()=>applyAutoCorners(true);
+function solve(A,b){const n=b.length;A=A.map((r,i)=>r.concat(b[i]));for(let i=0;i<n;i++){let k=i;for(let j=i+1;j<n;j++)if(Math.abs(A[j][i])>Math.abs(A[k][i]))k=j;if(Math.abs(A[k][i])<1e-9)return null;[A[i],A[k]]=[A[k],A[i]];let t=A[i][i];for(let z=i;z<=n;z++)A[i][z]/=t;for(let j=0;j<n;j++){if(j===i)continue;let f=A[j][i];for(let z=i;z<=n;z++)A[j][z]-=f*A[i][z]}}return A.map(r=>r[n])}
+// destination -> source projective mapping
+function homography(src){const dst=[[0,0],[W-1,0],[W-1,H-1],[0,H-1]],A=[],b=[];for(let i=0;i<4;i++){let [x,y]=dst[i],p=src[i];A.push([x,y,1,0,0,0,-x*p.x,-y*p.x]);b.push(p.x);A.push([0,0,0,x,y,1,-x*p.y,-y*p.y]);b.push(p.y)}return solve(A,b)}
+function validQuad(){if(points.length!==4)return false;let sign=0;for(let i=0;i<4;i++){const a=points[i],b=points[(i+1)%4],c=points[(i+2)%4],cross=(b.x-a.x)*(c.y-b.y)-(b.y-a.y)*(c.x-b.x);if(Math.abs(cross)<1)return false;if(sign&&cross*sign<0)return false;sign=cross}return true}
+// Multi-sample edge tracing: each side is sampled in projective coordinates.
+// The user can override the midpoints; a detected curve is used only with adequate confidence.
+function edgeUV(side,t){return side===0?[t,0]:side===1?[1,t]:side===2?[1-t,1]:[0,1-t]}
+function interpolateOffset(track,t){if(!track||!track.length)return 0;const v=t*(track.length-1),i=Math.min(track.length-2,Math.floor(v)),f=v-i;return track[i]*(1-f)+track[i+1]*f}
+function curvedMap(u,v,m,refs){
+ // The projective mapping is exact at the four chosen corners. Curvature
+ // changes only the interior of each edge, with zero displacement at corners.
+ u=clamp(u,0,1);v=clamp(v,0,1);
+ const base=project(m,u*(W-1),v*(H-1));
+ if(!curveEnabled||curvePoints.length!==4)return base;
+ const n=[0,1,2,3].map(edgeNormal);
+ const top=sideOffset(0,u,m),right=sideOffset(1,v,m);
+ const bottom=sideOffset(2,1-u,m),left=sideOffset(3,1-v,m);
+ return {x:base.x+n[0].x*top*(1-v)+n[2].x*bottom*v+n[3].x*left*(1-u)+n[1].x*right*u,
+         y:base.y+n[0].y*top*(1-v)+n[2].y*bottom*v+n[3].y*left*(1-u)+n[1].y*right*u};
+}
+function autoCurve(){
+ // Trace each outer edge as a coherent path. Compare its image evidence with
+ // the straight path, rather than demanding a large per-pixel improvement.
+ const m=homography(points);if(!m)return {ok:false,count:0,notes:['四隅が不正です']};
+ const c=document.createElement('canvas');c.width=source.width;c.height=source.height;
+ const ctx=c.getContext('2d',{willReadFrequently:true});ctx.drawImage(original,0,0,c.width,c.height);
+ const data=ctx.getImageData(0,0,c.width,c.height).data,ww=c.width,hh=c.height;
+ function rgb(x,y){const xx=Math.round(x),yy=Math.round(y);if(xx<0||yy<0||xx>=ww||yy>=hh)return null;const i=(yy*ww+xx)*4;return [data[i],data[i+1],data[i+2]]}
+ function dist(a,b){return Math.hypot(a[0]-b[0],a[1]-b[1],a[2]-b[2])}
+ function median(a){const s=[...a].sort((x,y)=>x-y);return s[Math.floor(s.length/2)]}
+ resetCurvePoints();let count=0;const notes=[],tracks=[null,null,null,null];
+ for(let side=0;side<4;side++){
+  const a=points[side],b=points[(side+1)%4],len=Math.hypot(b.x-a.x,b.y-a.y),label=['上','右','下','左'][side];
+  if(len<65){notes.push(label+'：直線（解像度不足）');continue}
+  const n=edgeNormal(side),radius=Math.min(15,Math.max(4,len*.034));
+  const N=49,ts=Array.from({length:N},(_,i)=>i/(N-1));
+  const offsets=[];for(let d=-radius;d<=radius+.01;d+=.5)offsets.push(d);
+  if(!offsets.some(d=>Math.abs(d)<.2))offsets.push(0);
+  offsets.sort((a,b)=>a-b);
+  const M=offsets.length,gap=Math.min(3.4,Math.max(1.8,len*.006));
+  function contrast(t,off){
+   const p=baselineAt(side,t,m);
+   const outside=rgb(p.x+n.x*(off-gap),p.y+n.y*(off-gap));
+   const inside=rgb(p.x+n.x*(off+gap),p.y+n.y*(off+gap));
+   return outside&&inside?dist(outside,inside):0;
+  }
+  const evidence=ts.map(t=>offsets.map(d=>contrast(t,d)));
+  const zero=offsets.reduce((best,d,j)=>Math.abs(d)<Math.abs(offsets[best])?j:best,0);
+  // Dynamic programming prefers an unbroken edge and anchors both corners.
+  // A tiny center penalty prevents selecting background/artwork edges when tied.
+  const score=ts.map((t,i)=>offsets.map((d,j)=>evidence[i][j]*.85-Math.abs(d)*.32));
+  let prev=offsets.map((_,j)=>j===zero?0:-1e12),parents=[];
+  for(let i=1;i<N;i++){
+   const curr=Array(M).fill(-1e12),back=Array(M).fill(-1);
+   for(let j=0;j<M;j++){
+    if(i===N-1&&j!==zero)continue;
+    for(let k=0;k<M;k++){
+     const delta=Math.abs(offsets[j]-offsets[k]);
+     if(delta>2.5)continue;
+     const v=prev[k]+score[i][j]-delta*1.65-delta*delta*.85;
+     if(v>curr[j]){curr[j]=v;back[j]=k}
+    }
+   }
+   parents.push(back);prev=curr;
+  }
+  const raw=Array(N).fill(0);let j=zero;
+  for(let i=N-1;i>=1;i--){raw[i]=offsets[j];j=parents[i-1][j];if(j<0)break}
+  raw[0]=0;raw[N-1]=0;
+  // Fit ONE smooth arc to the noisy contour, never render the raw
+  // per-sample contour: artwork and textured backgrounds produce zigzags.
+  // Robust regression also rejects isolated strong but incorrect edges.
+  const fits=[];
+  for(let k=9;k<=39;k+=2){
+   const apex=k/(N-1),shape=ts.map(t=>peakShape(t,apex));
+   let amp=0,weights=Array(N).fill(1);
+   for(let iter=0;iter<4;iter++){
+    let numerator=0,denominator=0;
+    for(let i=3;i<N-3;i++){
+     const w=weights[i];numerator+=w*shape[i]*raw[i];denominator+=w*shape[i]*shape[i];
+    }
+    amp=denominator>1e-6?clamp(numerator/denominator,-radius,radius):0;
+    for(let i=3;i<N-3;i++){
+     const err=Math.abs(raw[i]-amp*shape[i]);
+     weights[i]=Math.min(1,2.2/Math.max(err,.001));
+    }
+   }
+   let loss=0;
+   for(let i=3;i<N-3;i++){
+    const err=Math.abs(raw[i]-amp*shape[i]);
+    loss+=err<=2.2?err*err:4.4*err-4.84;
+   }
+   fits.push({apex,amp,loss:loss/(N-6)});
+  }
+  fits.sort((a,b)=>a.loss-b.loss);
+  const fit=fits[0];
+  const arc=ts.map(t=>fit.amp*peakShape(t,fit.apex));
+  const interior=ts.map((t,i)=>({t,i,d:arc[i]})).filter(v=>v.t>=.12&&v.t<=.88);
+  const baseline=median(interior.map(v=>contrast(v.t,0)));
+  const improvement=median(interior.map(v=>contrast(v.t,v.d)-contrast(v.t,0)));
+  const trackStrength=median(interior.map(v=>contrast(v.t,v.d)));
+  // Refuse irregular edge tracking rather than bend the card into a zigzag.
+  const significant=Math.abs(fit.amp)>=1.5&&fit.loss<=5.0&&
+   improvement>=Math.max(1.5,baseline*.045)&&trackStrength>=12;
+  if(!significant){notes.push(label+'：直線（滑らかな弧を確認できず）');continue}
+  tracks[side]=arc;
+  apexTs[side]=fit.apex;
+  const p=baselineAt(side,fit.apex,m);
+  curvePoints[side]={x:p.x+n.x*fit.amp,y:p.y+n.y*fit.amp};
+  count++;notes.push(label+'：滑らかな弧 '+Math.round(fit.apex*100)+'%、ずれ '+fit.amp.toFixed(1)+'px');
+ }
+ edgeTracks=tracks;
+ return {ok:count>0,count,notes};
+}
+function renderWarp(resetInner){
+ if(!original||!validQuad())return false;
+ const m=homography(points);if(!m)return false;
+ const refs=straightMids(),sw=source.width,sh=source.height;
+ const oc=document.createElement('canvas');oc.width=sw;oc.height=sh;
+ const cx=oc.getContext('2d',{willReadFrequently:true});cx.drawImage(original,0,0,sw,sh);
+ const src=cx.getImageData(0,0,sw,sh),out=rctx.createImageData(W,H),s=src.data,d=out.data;
+ for(let y=0;y<H;y++)for(let x=0;x<W;x++){
+  const pt=curvedMap(x/(W-1),y/(H-1),m,refs),sx=pt.x,sy=pt.y,di=(y*W+x)*4;
+  if(!Number.isFinite(sx)||!Number.isFinite(sy)||sx<0||sy<0||sx>sw-1||sy>sh-1){d[di+3]=255;continue}
+  const px=clamp(sx,0,sw-1.000001),py=clamp(sy,0,sh-1.000001);
+  const xx=Math.floor(px),yy=Math.floor(py),fx=px-xx,fy=py-yy,ii=(yy*sw+xx)*4;
+  for(let k=0;k<3;k++){
+   const v0=s[ii+k]*(1-fx)+s[ii+4+k]*fx,v1=s[ii+sw*4+k]*(1-fx)+s[ii+sw*4+4+k]*fx;
+   d[di+k]=v0*(1-fy)+v1*fy
+  }d[di+3]=255;
+ }
+ corrected=out;if(resetInner){inner={l:.08,r:.92,t:.07,b:.93};innerValid=false;manualEdges.clear();}drawRect();return true;
+}
+function detectPrintBoundary(){
+ if(!corrected)return false;
+ const d=corrected.data;
+ // Assess paired print edges together. Avoid artwork/text strokes by measuring
+ // coherence across a long span, not the strongest isolated colour transition.
+ function candidates(axis,nearStart){
+  const len=axis==='x'?W:H,other=axis==='x'?H:W;
+  const low=Math.ceil(len*(nearStart?.025:.855)),high=Math.floor(len*(nearStart?.145:.975));
+  const result=[];
+  for(let q=low;q<=high;q++){
+   const vals=[];
+   for(let v=Math.ceil(other*.16);v<=Math.floor(other*.84);v+=3){
+    const x1=axis==='x'?q-3:v,y1=axis==='x'?v:q-3;
+    const x2=axis==='x'?q+3:v,y2=axis==='x'?v:q+3;
+    const i1=(y1*W+x1)*4,i2=(y2*W+x2)*4;
+    const dr=d[i1]-d[i2],dg=d[i1+1]-d[i2+1],db=d[i1+2]-d[i2+2];
+    vals.push(Math.sqrt(dr*dr+dg*dg+db*db));
+   }
+   vals.sort((x,y)=>x-y);
+   const n=vals.length,q20=vals[Math.floor(n*.2)],med=vals[Math.floor(n*.5)],q70=vals[Math.floor(n*.7)];
+   // A genuine border tends to continue across much of the card.
+   const coherence=vals.filter(v=>v>=12).length/n;
+   const score=(.50*q20+.40*med+.10*q70)*Math.min(1,coherence/.68);
+   result.push({q,score,coherence});
+  }
+  return result.sort((a,b)=>b.score-a.score).slice(0,20);
+ }
+ function pairCandidates(axis){
+  const len=axis==='x'?W:H;
+  const starts=candidates(axis,true),ends=candidates(axis,false),pairs=[];
+  for(const l of starts)for(const r of ends){
+   const left=l.q,right=len-1-r.q,ratio=left/(left+right);
+   // A 60:40 prior is only a preference, not a hard limit or a fabricated result.
+   const excess=Math.max(0,Math.abs(ratio-.5)-.10);
+   const prior=Math.exp(-Math.pow(excess/.075,2));
+   const score=Math.min(l.score,r.score)*(.72+.28*prior)+.12*(l.score+r.score)*prior;
+   if(Math.min(l.score,r.score)>=12&&Math.min(l.coherence,r.coherence)>=.40)
+    pairs.push({l,r,score,ratio});
+  }
+  return pairs.sort((a,b)=>b.score-a.score).slice(0,24);
+ }
+ const xPairs=pairCandidates('x'),yPairs=pairCandidates('y');
+ let best=null;
+ // The inner printed field varies by design, so card proportion is only a soft tie-break.
+ const expectedAspect=W/H;
+ for(const xp of xPairs)for(const yp of yPairs){
+  const aspect=(xp.r.q-xp.l.q)/(yp.r.q-yp.l.q);
+  if(!Number.isFinite(aspect)||aspect<=0)continue;
+  const aspectPrior=Math.exp(-Math.pow(Math.log(aspect/expectedAspect)/.18,2));
+  const edgeQuality=Math.sqrt(xp.score*yp.score);
+  const score=edgeQuality*(.82+.18*aspectPrior);
+  if(!best||score>best.score)best={lr:xp,tb:yp,score,aspect,aspectPrior};
+ }
+ const lr=best?.lr||null,tb=best?.tb||null;
+ if(!lr||!tb){
+  innerValid=false;manualEdges.clear();
+  inner={l:.055,r:.945,t:.055,b:.945};drawRect();
+  setStatus('印刷境界を確定できませんでした。ピンク線は仮位置です。4辺を手動で合わせるまで測定値を表示しません。');
+  return false;
+ }
+ inner={l:lr.l.q/W,r:lr.r.q/W,t:tb.l.q/H,b:tb.r.q/H};
+ innerValid=true;manualEdges.clear();drawRect();
+ const suspicious=Math.abs(lr.ratio-.5)>.10||Math.abs(tb.ratio-.5)>.10;
+ setStatus(suspicious?'自動検出は60:40を超えています。印刷境界とピンク線の一致を必ず確認してください。':'印刷境界を推定しました。ピンク線の位置を確認してください。');
+ return true;
+}
+function warp(){
+ if(!original)return;
+ if(!validQuad()){setStatus('四隅が交差しているか、カード領域が小さすぎます。');return}
+ if(!renderWarp(true)){setStatus('画像補正に失敗しました。');return}
+ showStage(3);const detected=detectPrintBoundary();chooseEdge('l',false);
+ if(detected)setStatus('正面画像を表示しました。縦横比も手掛かりに境界候補を選びました。ピンクの線と印刷境界が一致しているか確認してください。');
+ $('cornerStatus').textContent='補正済み（要確認）';
+}
+$('warp').onclick=warp;
+function drawRect(){rctx.clearRect(0,0,W,H);if(corrected)rctx.putImageData(corrected,0,0);else{rctx.fillStyle='#0a1423';rctx.fillRect(0,0,W,H);rctx.fillStyle='#9db0c6';rctx.textAlign='center';rctx.font='16px sans-serif';rctx.fillText('補正後の画像',W/2,H/2);updateMetrics();return}rctx.strokeStyle='#ff5ca8';rctx.lineWidth=2.5;rctx.setLineDash([10,5]);rctx.strokeRect(inner.l*W,inner.t*H,(inner.r-inner.l)*W,(inner.b-inner.t)*H);rctx.setLineDash([]);const guides=[[inner.l*W,H/2],[inner.r*W,H/2],[W/2,inner.t*H],[W/2,inner.b*H]];guides.forEach((p,i)=>{rctx.beginPath();rctx.arc(p[0],p[1],10,0,2*Math.PI);rctx.fillStyle='#ff5ca8';rctx.fill();rctx.fillStyle='#3d1027';rctx.textAlign='center';rctx.font='bold 12px sans-serif';rctx.fillText(['L','R','T','B'][i],p[0],p[1]+4)});updateMetrics()}
+function updatePsaGuide(lr,tb){
+ const limit=mode==='front'?55:75;
+ const title=mode==='front'?'表面':'裏面';
+ const ok=Number.isFinite(lr)&&Number.isFinite(tb)&&Math.max(lr,100-lr,tb,100-tb)<=limit+1e-7;
+ const g=$('psaGuide');
+ if(!g)return;
+ g.textContent=`PSA10センタリング目安（${title}）：${limit}:${100-limit}以内（左右・上下とも）。`+
+  (Number.isFinite(lr)&&Number.isFinite(tb)?(ok?' 現在の数値は目安の範囲内です。':' 現在の数値は目安の範囲外です。'):' 境界を合わせてから比較します。')+
+  ' ※PSA10の取得を予測・保証するものではありません。';
+}
+function updateMetrics(){if(!corrected||!innerValid){$('lr').textContent='-- : --';$('tb').textContent='-- : --';$('lrpx').textContent='未測定';$('tbpx').textContent='未測定';updatePsaGuide(NaN,NaN);return}const left=inner.l*W,right=(1-inner.r)*W,top=inner.t*H,bottom=(1-inner.b)*H;const lr=100*left/(left+right),tb=100*top/(top+bottom);$('lr').textContent=`${lr.toFixed(1)} : ${(100-lr).toFixed(1)}`;$('tb').textContent=`${tb.toFixed(1)} : ${(100-tb).toFixed(1)}`;$('lrpx').textContent=`左 ${left.toFixed(1)}px / 右 ${right.toFixed(1)}px`;$('tbpx').textContent=`上 ${top.toFixed(1)}px / 下 ${bottom.toFixed(1)}px`;updatePsaGuide(lr,tb)}
+rect.addEventListener('pointerdown',e=>{if(!corrected)return;const p=getPos(e,rect),positions=[inner.l*W,inner.r*W,inner.t*H,inner.b*H];const ds=[Math.abs(p.x-positions[0]),Math.abs(p.x-positions[1]),Math.abs(p.y-positions[2]),Math.abs(p.y-positions[3])];let m=Math.min(...ds);if(m<36){active=ds.indexOf(m)+4;chooseEdge(['l','r','t','b'][active-4]);rect.setPointerCapture(e.pointerId);showMagnifier('rect',p.x,p.y);e.preventDefault()}});
+rect.addEventListener('pointermove',e=>{if(active===null||active<4)return;manualEdges.add(active);innerValid=manualEdges.size===4||innerValid;const p=getPos(e,rect);if(active===4)inner.l=clamp(p.x/W,.005,inner.r-.015);if(active===5)inner.r=clamp(p.x/W,inner.l+.015,.995);if(active===6)inner.t=clamp(p.y/H,.005,inner.b-.015);if(active===7)inner.b=clamp(p.y/H,inner.t+.015,.995);drawRect();showMagnifier('rect',p.x,p.y);e.preventDefault()});rect.addEventListener('pointerup',stopSource);rect.addEventListener('pointercancel',stopSource);
+$('defaultInner').onclick=()=>{inner={l:.08,r:.92,t:.07,b:.93};innerValid=false;manualEdges.clear();drawRect();setStatus('ピンク線は仮位置です。印刷境界を合わせてください。')};
+// Heuristic border detection using vertical/horizontal average RGB difference.
+$('autoInner').onclick=detectPrintBoundary;
+$('front').onclick=()=>{mode='front';updateMetrics();$('front').classList.add('active');$('back').classList.remove('active');setStatus('表面モード：枠のないカードは測定の基準を決められない場合があります。')};$('back').onclick=()=>{mode='back';updateMetrics();$('back').classList.add('active');$('front').classList.remove('active');setStatus('裏面モード：裏面の青い枠の内側など、測定基準を統一してください。')};
+$('save').onclick=()=>{if(!corrected){setStatus('補正画像がありません。');return}const c=document.createElement('canvas');c.width=W;c.height=H+70;const x=c.getContext('2d');x.fillStyle='#0b1220';x.fillRect(0,0,c.width,c.height);x.drawImage(rect,0,0);x.fillStyle='#eaf3ff';x.font='bold 16px sans-serif';x.fillText('Card Centering Lab / '+(mode==='front'?'表面':'裏面'),14,H+24);x.font='14px sans-serif';x.fillText('左右 '+$('lr').textContent+'    上下 '+$('tb').textContent,14,H+50);c.toBlob(blob=>{if(!blob)return;const a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download='card_centering.png';a.click();setTimeout(()=>URL.revokeObjectURL(url),10000);setStatus('測定画像を保存しました。iOSでは共有・ダウンロードの操作が必要な場合があります。')},'image/png')};
+
+// Clean rectified card for image search. The preview is rendered in-page to avoid popup blockers.
+function makeSearchCanvas(){
+ if(!corrected)throw new Error('先にカードを正面表示してください。');
+ const c=document.createElement('canvas');c.width=W;c.height=H;
+ c.getContext('2d').putImageData(corrected,0,0);
+ return c;
+}
+function showSearchPreview(){
+ const status=$('searchStatus');
+ try{
+  $('searchImagePreview').src=makeSearchCanvas().toDataURL('image/png');
+  $('searchImageBox').classList.remove('hidden');
+  status.textContent='Googleに渡す補正画像を表示しました。';
+  $('searchImageBox').scrollIntoView({behavior:'smooth',block:'nearest'});
+ }catch(e){status.textContent='画像を表示できません：'+(e.message||String(e));}
+}
+$('showSearchImage').onclick=showSearchPreview;
+$('shareSearchImage').onclick=async()=>{
+ const status=$('searchStatus');
+ if(!corrected){status.textContent='先にカードを正面表示してください。';return;}
+ try{
+  const canvas=makeSearchCanvas();
+  const blob=await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('画像生成失敗')),'image/png'));
+  const file=new File([blob],'pokemon_card_search.png',{type:'image/png'});
+  if(navigator.canShare&&navigator.canShare({files:[file]})&&navigator.share){
+   await navigator.share({files:[file]});
+   status.textContent='共有操作が終了しました。Googleで検索を選択した場合は、Googleアプリで「Google レンズで画像を検索」を押してください。';
+  }else{
+   showSearchPreview();
+   status.textContent='この環境では画像共有に対応していません。補正画像を表示しました。';
+  }
+ }catch(e){
+  if(e.name==='AbortError'){status.textContent='共有をキャンセルしました。';return;}
+  showSearchPreview();
+  status.textContent='画像共有を開始できませんでした。補正画像を表示しました。';
+ }
+};
+</script></body></html>
