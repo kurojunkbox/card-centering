@@ -739,6 +739,8 @@ async function openSavedCard(id,origin){
 async function returnSavedViewerToShelf(){
  if(!activeSavedCardId)return;await persistTiltPreferences();if(maximizedViewActive)await exitMaximizedView();
  const id=String(activeSavedCardId),srcRect=tiltCard.getBoundingClientRect(),src=savedImageUrl; shelfReturningCardId=id;let targetEl=null;
+ // Hide any copy left in the existing gallery before that gallery is shown again.
+ $('savedCardsList').querySelector(`[data-card-id="${CSS.escape(id)}"]`)?.classList.add('shelf-flight-hidden');
  try{
   await animateShelfCard(src,srcRect,null,async()=>{tiltCard.classList.add('shelf-flight-hidden');showSavedGallery();await renderSavedCards();await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));targetEl=$('savedCardsList').querySelector(`[data-card-id="${CSS.escape(id)}"]`);const targetImg=targetEl?.querySelector('img');if(targetImg){targetImg.loading='eager';await waitForImage(targetImg)}const rect=targetImg?.getBoundingClientRect()||targetEl?.getBoundingClientRect();return rect&&{left:rect.left,top:rect.top,width:rect.width,height:rect.height}},()=>targetEl?.classList.remove('shelf-flight-hidden'));
  }finally{
