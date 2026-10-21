@@ -602,13 +602,13 @@ let tiltPointers=new Map(),glareLevel=0,tiltZoom=1,tiltPanX=0,tiltPanY=0,pinchSt
 let reliefNormals=null,reliefFrame=null,reliefLight={x:.5,y:.42};
 const holoPalette=(()=>{const p=new Uint8Array(360*3),s=1,l=.57,c=(1-Math.abs(2*l-1))*s,m=l-c/2;for(let h=0;h<360;h++){const q=c*(1-Math.abs((h/60)%2-1));let r=0,g=0,b=0;if(h<60){r=c;g=q}else if(h<120){r=q;g=c}else if(h<180){g=c;b=q}else if(h<240){g=q;b=c}else if(h<300){r=q;b=c}else{r=c;b=q}p[h*3]=Math.round((r+m)*255);p[h*3+1]=Math.round((g+m)*255);p[h*3+2]=Math.round((b+m)*255)}return p})();
 function prepareRelief(source,width=400,targetCanvas=tiltRelief,commit=true){
- const w=width,h=Math.round(w*H/W),tmp=document.createElement('canvas'),artX0=Math.round(w*.02),artX1=Math.round(w*.98),artY0=Math.round(h*.02),artY1=Math.round(h*.98);tmp.width=w;tmp.height=h;targetCanvas.width=w;targetCanvas.height=h;const targetCtx=targetCanvas.getContext('2d',{willReadFrequently:true});
+ const w=width,h=Math.round(w*H/W),tmp=document.createElement('canvas');tmp.width=w;tmp.height=h;targetCanvas.width=w;targetCanvas.height=h;const targetCtx=targetCanvas.getContext('2d',{willReadFrequently:true});
  const c=tmp.getContext('2d',{willReadFrequently:true});c.drawImage(source,0,0,w,h);const src=c.getImageData(0,0,w,h).data,n=w*h,gray=new Float32Array(n),smooth=new Float32Array(n);
  for(let i=0;i<n;i++){const j=i*4;gray[i]=(src[j]*.299+src[j+1]*.587+src[j+2]*.114)/255}
  for(let y=0;y<h;y++)for(let x=0;x<w;x++){let sum=0,count=0;for(let yy=Math.max(0,y-1);yy<=Math.min(h-1,y+1);yy++)for(let xx=Math.max(0,x-1);xx<=Math.min(w-1,x+1);xx++){sum+=gray[yy*w+xx];count++}smooth[y*w+x]=sum/count}
  const nx=new Float32Array(n),ny=new Float32Array(n),nz=new Float32Array(n),edge=new Float32Array(n),fineLine=new Float32Array(n),orientation=new Float32Array(n),grooveHeight=new Float32Array(n),grooveNx=new Float32Array(n),grooveNy=new Float32Array(n),grooveNz=new Float32Array(n);
  for(let y=0;y<h;y++)for(let x=0;x<w;x++){
-  const i=y*w+x,l=smooth[y*w+Math.max(0,x-1)],r=smooth[y*w+Math.min(w-1,x+1)],u=smooth[Math.max(0,y-1)*w+x],d=smooth[Math.min(h-1,y+1)*w+x],gx=(r-l)*5,gy=(d-u)*5,len=Math.hypot(gx,gy,1),fade=Math.max(0,Math.min(1,(x-artX0)/(w*.02),(artX1-x)/(w*.02),(y-artY0)/(h*.02),(artY1-y)/(h*.02)));
+  const i=y*w+x,l=smooth[y*w+Math.max(0,x-1)],r=smooth[y*w+Math.min(w-1,x+1)],u=smooth[Math.max(0,y-1)*w+x],d=smooth[Math.min(h-1,y+1)*w+x],gx=(r-l)*5,gy=(d-u)*5,len=Math.hypot(gx,gy,1),fade=1;
   const dx=x-w*.52,dy=(y-h*.48)*.86,radius=Math.hypot(dx,dy),angle=Math.atan2(dy,dx),rakedRadius=radius+2.2*Math.sin(angle*3+radius*.018)+.9*Math.sin(angle*7-radius*.026),phase=rakedRadius*Math.PI*2/2.4;
   nx[i]=-gx/len;ny[i]=-gy/len;nz[i]=1/len;orientation[i]=Math.atan2(ny[i],nx[i])*180/Math.PI;edge[i]=Math.min(1,Math.hypot(gx,gy)*6)*fade;fineLine[i]=Math.pow(Math.max(0,Math.cos(phase)),5)*fade;grooveHeight[i]=Math.sin(phase)*.16
  }
